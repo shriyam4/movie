@@ -1,0 +1,34 @@
+def calculate_profit_loss(stock_info, stock_prices, current_time):
+    realized_profit_loss = 0
+    unrealized_profit_loss = 0
+
+    for i in range(len(stock_info)):
+        quantity_bought, time_of_purchase, time_of_sell = stock_info[i]
+        current_price = stock_prices[i][current_time - 1]
+
+        if time_of_sell == 0:
+            # Stock not sold yet
+            unrealized_profit_loss += quantity_bought * (current_price - stock_prices[i][time_of_purchase - 1])
+        else:
+            # Stock sold
+            realized_profit_loss += quantity_bought * (stock_prices[i][time_of_sell - 1] - stock_prices[i][time_of_purchase - 1])
+
+    return realized_profit_loss, unrealized_profit_loss
+
+# Input
+N = int(input())
+stock_info = []
+for _ in range(N):
+    stock_info.append(tuple(map(int, input().split())))
+
+M = int(input())
+stock_prices = [list(map(int, input().split())) for _ in range(N)]
+
+current_time = int(input())
+
+# Calculate P/L
+realized_pl, unrealized_pl = calculate_profit_loss(stock_info, stock_prices, current_time)
+
+# Output
+print(realized_pl)
+print(unrealized_pl)
